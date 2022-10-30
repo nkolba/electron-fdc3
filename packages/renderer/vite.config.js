@@ -37,6 +37,7 @@ const config = {
       input: {
         index: 'index.html',
         homeView: 'homeView.html',
+        sailView: 'sailView.html',
         channelPicker: 'channelPicker.html',
         intentResolver: 'intentResolver.html',
         searchResults: 'searchResults.html',

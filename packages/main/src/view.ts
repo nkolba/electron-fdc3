@@ -84,12 +84,16 @@ export class View {
     if (config) {
       this.directoryData = config.directoryData;
     }
+    const isSystem = config?.isSystem || url === undefined ? true : false;
+    let preload;
 
-    const preload = url
-      ? this.fdc3Version === '1.2'
-        ? FDC3_1_2_PRELOAD
-        : FDC3_2_0_PRELOAD
-      : HOME_PRELOAD;
+    if (isSystem) {
+      this.type = 'system';
+      preload = HOME_PRELOAD;
+    } else {
+      preload =
+        this.fdc3Version === '1.2' ? FDC3_1_2_PRELOAD : FDC3_2_0_PRELOAD;
+    }
 
     this.content = new BrowserView({
       webPreferences: {

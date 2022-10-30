@@ -8,4 +8,6 @@ export interface ViewConfig {
   onReady?: (view: View) => Promise<View | void>;
 
   directoryData?: DirectoryApp;
+
+  isSystem?: boolean;
 }

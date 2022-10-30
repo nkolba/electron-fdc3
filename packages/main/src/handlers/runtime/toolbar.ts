@@ -28,6 +28,12 @@ export const openToolsMenu = async (message: RuntimeMessage) => {
           }
         },
       },
+      {
+        label: 'Sail Dev View',
+        click: async () => {
+          await workspace.createSailView();
+        },
+      },
     ];
 
     const menu = Menu.buildFromTemplate(template);

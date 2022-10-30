@@ -430,6 +430,28 @@ export class Workspace {
     });
   }
 
+  /**
+   * create a developer view of FDC3 state in Sail
+   */
+  async createSailView(): Promise<void> {
+    const VIEW_PATH =
+      import.meta.env.DEV &&
+      import.meta.env.VITE_DEV_SERVER_SAIL_URL !== undefined
+        ? import.meta.env.VITE_DEV_SERVER_SAIL_URL
+        : new URL(
+            '../renderer/dist/sailView.html',
+            'file://' + __dirname,
+          ).toString();
+
+    // const PRELOAD_PATH = join(__dirname, '../../preload/dist/systemView/index.cjs');
+
+    this.createView(VIEW_PATH, {
+      workspace: this,
+      isSystem: true,
+    });
+    return;
+  }
+
   createResultsWindow(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.resultsWindow = new BrowserWindow({
