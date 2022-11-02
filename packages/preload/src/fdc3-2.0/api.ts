@@ -389,8 +389,12 @@ export const createAPI = (): DesktopAgent => {
     findInstances: async (
       app: AppIdentifier,
     ): Promise<Array<AppIdentifier>> => {
-      const result: Array<AppIdentifier> = [app];
-      return result;
+      const instancesResult: Array<AppIdentifier> = await sendMessage(
+        FDC3_2_0_TOPICS.FIND_INSTANCES,
+        { appIdentifier: app },
+      );
+      console.log('*** findInstancesResult', instancesResult);
+      return instancesResult;
     },
 
     getAppMetadata: async (app: AppIdentifier): Promise<AppMetadata> => {
