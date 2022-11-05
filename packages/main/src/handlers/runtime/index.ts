@@ -13,6 +13,7 @@ import { openToolsMenu } from './toolbar';
 import { pickChannel, joinChannel } from './channelPicker';
 import { loadSearchResults } from './search';
 import { initFetchFromDirectory } from './directory-fetch';
+import { getAllApps } from './directory';
 
 export const register = (runtime: Runtime) => {
   runtime.addHandler(RUNTIME_TOPICS.TAB_SELECTED, tabSelected);
@@ -29,4 +30,5 @@ export const register = (runtime: Runtime) => {
   runtime.addHandler(RUNTIME_TOPICS.OPEN_CHANNEL_PICKER, pickChannel);
   runtime.addHandler(RUNTIME_TOPICS.JOIN_WORKSPACE_TO_CHANNEL, joinChannel);
   runtime.addHandler(RUNTIME_TOPICS.SEARCH_LOAD_RESULTS, loadSearchResults);
+  runtime.addHandler(RUNTIME_TOPICS.GET_ALL_APPS, getAllApps);
 };

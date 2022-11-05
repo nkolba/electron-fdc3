@@ -5,7 +5,6 @@ import { userChannels } from '/@main/handlers/fdc3/userChannels';
 import { Context } from '@finos/fdc3';
 import { FDC3_2_0_TOPICS } from '/@main/handlers/fdc3/2.0/topics';
 import { FDC3_1_2_TOPICS } from '/@main/handlers/fdc3/1.2/topics';
-import { getRuntime } from '/@main/index';
 
 let id: string | undefined = undefined;
 let intent: string | undefined = undefined;
@@ -19,7 +18,7 @@ const eventQ: Array<() => void> = [];
  * listen for start event - assigning id for the instance
  */
 ipcRenderer.on(RUNTIME_TOPICS.WINDOW_START, (event, args) => {
-  console.log(event.type);
+  console.log('window start', event.type);
   id = args.id;
   intent = args.intent;
   context = args.context;
@@ -57,35 +56,13 @@ const resolveIntent = (data: {
 
 const getApps = () => {
   return new Promise((resolve) => {
-    /* ipcRenderer.once(
-      `${RUNTIME_TOPICS.FETCH_FROM_DIRECTORY}-`,
-      (event, args) => {
-        const results = args.data;
-        resolve(results);
-      },
-    );
-    if (id) {
-      // Fetch External Data Source
-      ipcRenderer.send(RUNTIME_TOPICS.FETCH_FROM_DIRECTORY, {
-        source: id,
-        data: {
-          sourceType: 'view',
-          query: '',
-        },
-      });
-    } else {
-      eventQ.push(() => {
-        ipcRenderer.send(RUNTIME_TOPICS.FETCH_FROM_DIRECTORY, {
-          source: id,
-          data: {
-            sourceType: 'view',
-            query: '',
-          },
-        });
-      });
-    }*/
-    const runtime = getRuntime();
-    resolve(runtime.getDirectory().retrieveAll());
+    ipcRenderer.on('RUNTIME_TOPICS.GET_ALL_APPS', (event, args) => {
+      resolve(args);
+    });
+
+    ipcRenderer.send(RUNTIME_TOPICS.GET_ALL_APPS, {
+      source: id,
+    });
   });
 };
 

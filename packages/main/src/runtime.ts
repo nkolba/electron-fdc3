@@ -138,7 +138,7 @@ export class Runtime {
             data: null,
           };
         }
-        console.log('message response', name, r);
+        console.log('message response', name, args.eventId, r);
 
         if (event.ports && args.eventId) {
           event.ports[0].postMessage({

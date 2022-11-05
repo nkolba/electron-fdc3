@@ -53,6 +53,12 @@ export class View {
         id: this.id,
         directory: this.directoryData || null,
       });
+      this.content.webContents.send(RUNTIME_TOPICS.WINDOW_START, {
+        id: this.id,
+        workspaceId: this.parent?.id,
+        directory: this.directoryData || null,
+      });
+
       this.initiated = true;
       console.log('view created', this.id, url);
     };
