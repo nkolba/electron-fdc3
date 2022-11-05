@@ -1,5 +1,5 @@
 import { chrome } from '../../.electron-vendors.cache.json';
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 import { builtinModules } from 'module';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import tsConfigPaths from 'rollup-plugin-tsconfig-paths';
@@ -16,7 +16,6 @@ const config = {
   envDir: process.cwd(),
   resolve: {
     alias: {
-      '/@/': join(PACKAGE_ROOT, 'src') + '/',
       '/@main/': resolve(PACKAGE_ROOT, '../main/src') + '/',
     },
   },

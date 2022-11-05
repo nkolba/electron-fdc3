@@ -5,6 +5,7 @@ import { userChannels } from '/@main/handlers/fdc3/userChannels';
 import { Context } from '@finos/fdc3';
 import { FDC3_2_0_TOPICS } from '/@main/handlers/fdc3/2.0/topics';
 import { FDC3_1_2_TOPICS } from '/@main/handlers/fdc3/1.2/topics';
+import { getRuntime } from '/@main/index';
 
 let id: string | undefined = undefined;
 let intent: string | undefined = undefined;
@@ -56,7 +57,7 @@ const resolveIntent = (data: {
 
 const getApps = () => {
   return new Promise((resolve) => {
-    ipcRenderer.once(
+    /* ipcRenderer.once(
       `${RUNTIME_TOPICS.FETCH_FROM_DIRECTORY}-`,
       (event, args) => {
         const results = args.data;
@@ -82,7 +83,9 @@ const getApps = () => {
           },
         });
       });
-    }
+    }*/
+    const runtime = getRuntime();
+    resolve(runtime.getDirectory().retrieveAll());
   });
 };
 

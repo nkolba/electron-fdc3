@@ -1,8 +1,9 @@
-import { getRuntime } from '/@/index';
+import { getRuntime } from '../../../index';
 import { RuntimeMessage } from '/@/handlers/runtimeMessage';
 import { View } from '/@/view';
 import { FDC3_1_2_TOPICS } from './topics';
 import { Pending } from '/@/types/Pending';
+import { getChannelContext } from './utils';
 
 export const dropContextListener = async (message: RuntimeMessage) => {
   const runtime = getRuntime();
@@ -67,6 +68,8 @@ export const addContextListener = async (message: RuntimeMessage) => {
       ? view.channel
       : 'default'; //: (c && c.channel) ? c.channel
 
+  const contextType = message.data.type || undefined;
+
   if (view) {
     view.listeners.push({
       listenerId: (message.data && message.data.id) || '',
@@ -77,8 +80,10 @@ export const addContextListener = async (message: RuntimeMessage) => {
     });
 
     /*
-              are there any pending contexts for the listener just added? 
-              */
+        are there any pending contexts for the listener just added? 
+
+      */
+    let contextSent = false;
     const pending = view.getPendingContexts();
     if (pending && pending.length > 0) {
       pending.forEach((pending: Pending, i: number) => {
@@ -86,12 +91,10 @@ export const addContextListener = async (message: RuntimeMessage) => {
 
         if (
           message.data === undefined ||
-          (message.data && message.data.type === undefined) ||
-          (pending.context &&
-            pending.context.type &&
-            pending.context.type === message.data &&
-            message.data.type)
+          contextType === undefined ||
+          pending.context?.type === contextType
         ) {
+          contextSent = true;
           view.content.webContents.send(FDC3_1_2_TOPICS.CONTEXT, {
             topic: 'context',
             listenerId: message.data && message.data.id,
@@ -105,6 +108,27 @@ export const addContextListener = async (message: RuntimeMessage) => {
           view.removePendingContext(i);
         }
       });
+    }
+
+    /* or, get the latest context if the listener is set for a channel */
+    if (!contextSent && channel) {
+      const currentContext = getChannelContext(channel, contextType);
+      console.log(
+        '@@@@@@@@@@@@@@@ addContextListener',
+        channel,
+        currentContext,
+      );
+      if (currentContext !== null) {
+        view.content.webContents.send(FDC3_1_2_TOPICS.CONTEXT, {
+          topic: 'context',
+          listenerId: message.data && message.data.id,
+          data: {
+            context: currentContext,
+            listenerId: message.data && message.data.id,
+          },
+          source: source,
+        });
+      }
     }
   }
 };

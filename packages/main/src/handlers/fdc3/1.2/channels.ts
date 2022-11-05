@@ -1,8 +1,9 @@
-import { getRuntime } from '/@/index';
+import { getRuntime } from '../../../index';
 import { RuntimeMessage } from '/@/handlers/runtimeMessage';
 import { ChannelData } from '/@/types/Channel';
-import { Context, ChannelError } from 'fdc3-1.2';
+import { ChannelError } from 'fdc3-1.2';
 import { systemChannels } from './systemChannels';
+import { getChannelContext } from './utils';
 
 export const getSystemChannels = async () => {
   return systemChannels;
@@ -16,26 +17,10 @@ export const getCurrentChannel = async (message: RuntimeMessage) => {
 };
 
 export const getCurrentContext = async (message: RuntimeMessage) => {
-  const runtime = getRuntime();
-
-  const channel = (message.data && message.data.channel) || undefined;
-  const type = (message.data && message.data.contextType) || undefined;
-  let ctx: Context | null = null;
-  if (channel) {
-    const contexts = runtime.getContexts();
-    const channelContext = contexts.get(channel);
-    if (type) {
-      if (channelContext) {
-        ctx =
-          channelContext.find((c) => {
-            return c.type === type;
-          }) || null;
-      }
-    } else {
-      ctx = channelContext && channelContext[0] ? channelContext[0] : ctx;
-    }
-  }
-  return ctx;
+  return await getChannelContext(
+    message.data.channel,
+    message.data.contextType,
+  );
 };
 
 export const getOrCreateChannel = async (message: RuntimeMessage) => {
@@ -87,6 +72,7 @@ export const joinChannel = async (message: RuntimeMessage) => {
     );
     return true;
   }
+  throw ChannelError.NoChannelFound;
 };
 
 //generate / get full channel object from an id - returns null if channel id is not a system channel or a registered app channel
