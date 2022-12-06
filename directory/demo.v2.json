@@ -15,7 +15,7 @@
         "screenshots": [],
         "type": "web",
         "details": {
-          "url": "https://apps.connectifi-interop.com/sail/contactsDemo/step1.html"
+         "url": "http://localhost:8080/sail/contactsDemo/step1.html"
         },
         "interop": {
           "intents": {
