@@ -19,7 +19,6 @@ import {
   DEFAULT_WINDOW_HEIGHT,
   DEFAULT_WINDOW_WIDTH,
   TOOLBAR_HEIGHT,
-  TOPICS,
 } from './constants';
 import { randomUUID } from 'crypto';
 import { RUNTIME_TOPICS } from '/@/handlers/runtime/topics';
@@ -168,7 +167,7 @@ export class Workspace {
               try {
                 console.log('setting top browser view');
                 this.window.setTopBrowserView(view.content);
-                this.window.webContents.send(TOPICS.SELECT_TAB, {
+                this.window.webContents.send(RUNTIME_TOPICS.SELECT_TAB, {
                   viewId: tabId,
                 });
                 //focus the workspace window?
@@ -340,7 +339,7 @@ export class Workspace {
             //just reselect the already selected tab
             this.setSelectedTab(this.selectedTab);
             if (this.window) {
-              this.window.webContents.send(TOPICS.SELECT_TAB, {
+              this.window.webContents.send(RUNTIME_TOPICS.SELECT_TAB, {
                 viewId: this.selectedTab,
               });
             }
@@ -543,7 +542,7 @@ export class Workspace {
       await this.createChannelWindow();
     }
     if (this.channelWindow) {
-      this.channelWindow.webContents.send(TOPICS.WINDOW_SHOW, {
+      this.channelWindow.webContents.send(RUNTIME_TOPICS.WINDOW_SHOW, {
         selectedChannel: this.channel,
       });
       const winPos: number[] = this.window ? this.window.getPosition() : [0, 0];

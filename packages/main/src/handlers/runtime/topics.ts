@@ -21,6 +21,7 @@ export const RUNTIME_TOPICS = {
   RES_LOAD_RESULTS: 'runtime:loadResolverResults',
   RES_RESOLVE_INTENT: 'runtime:resolveIntent',
   GET_SESSION_STATE: 'runtime:getSessionState',
+  WINDOW_SHOW: 'runtime:showWindow',
 };
 
 export const SAIL_TOPICS = {

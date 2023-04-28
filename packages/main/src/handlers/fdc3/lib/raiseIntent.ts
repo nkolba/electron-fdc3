@@ -48,9 +48,9 @@ export const resolveIntent = async (message: FDC3Message) => {
           data: { intent: data.intent, context: data.context },
           source: message.source,
         });
-
-        view.parent.setSelectedTab(view.id);
       }
+      console.log('****** setting intent view selected tab!!!', view.id);
+      view.parent.setSelectedTab(view.id);
     }
   }
   //send the resolution to the source
